@@ -8,22 +8,16 @@ trigger:
 
 pool:
   name: Default
-  vmImage: ubuntu-20.04
   demands:
-  - python3
-strategy:
-  matrix:
-    Python39:
-      python.version: '3.9'
-
+  - agent.name -equals ubuntuagent
 
 steps:
-- task: UsePythonVersion@0
+- task: CmdLine@2
   inputs:
-    versionSpec: '$(python.version)'
-    architecture: 'x64'
-    addToPath: false
-  displayName: 'Use Python $(python.version)'
+    script: |
+      echo apt-get update & apt-get upgrade -y here
+      sudo apt-get update && sudo apt-get upgrade -y
+      echo apt sources upgraded
 
 - script: |
     python3 -m pip install --upgrade pip
