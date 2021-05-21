@@ -15,8 +15,8 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      echo apt-get update & apt-get upgrade -y here
-      sudo apt-get update && sudo apt-get upgrade -y
+      echo apt-get update here
+      sudo apt-get update
       echo apt sources upgraded
 
 - script: |
