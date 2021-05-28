@@ -34,16 +34,20 @@ steps:
  
 - task: SonarCloudAnalyze@1
 
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+
 - script: |
     python3 startup.py sdist
   displayName: 'Artifact creation'
-  
+
 - task: TwineAuthenticate@1
   inputs:
     artifactFeed: 'myproject/pydemofeed'
 
 - script: |
-    'twine upload -r myproject/pydemofeed --config-file $(PYPIRC_PATH) dist/*'
+    python3 -m twine upload -r myproject/pydemofeed --config-file $(PYPIRC_PATH) dist/*
 
 
 
