@@ -38,14 +38,12 @@ steps:
     python3 startup.py sdist
   displayName: 'Artifact creation'
   
-- task: CopyFiles@2
+- task: TwineAuthenticate@1
   inputs:
-    targetFolder: $(Build.ArtifactStagingDirectory)
+    artifactFeed: 'myproject/pydemofeed'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'dist'
-    publishLocation: 'Container'
+- script: |
+    'twine upload -r myproject/pydemofeed --config-file $(PYPIRC_PATH) dist/*'
+
 
 
