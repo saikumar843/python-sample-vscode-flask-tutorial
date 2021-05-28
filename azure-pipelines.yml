@@ -46,8 +46,10 @@ steps:
   inputs:
     artifactFeed: 'myproject/pydemofeed'
 
-- script: |
-    python3 -m twine upload -r myproject/pydemofeed --config-file $(PYPIRC_PATH) dist/*
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'twine upload -r myproject/pydemofeed dist/*'
 
 
 
