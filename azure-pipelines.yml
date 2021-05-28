@@ -17,12 +17,22 @@ steps:
     pip install -r requirements.txt
   displayName: 'Install dependencies'
 
-- task: SonarCloudAnalyze@1
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'saikumartest'
+    organization: 'saikumartest'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'pythontesting'
+    cliProjectName: 'saikumartest'
+    cliSources: '.'
 
 - script: |
     pip install pytest pytest-azurepipelines
     pytest
   displayName: 'pytest'
+ 
+- task: SonarCloudAnalyze@1
 
 - script: |
     python3 startup.py sdist
