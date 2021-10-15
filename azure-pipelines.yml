@@ -12,27 +12,36 @@ pool:
   - agent.name -equals ubuntuagent
 
 steps:
-- task: CmdLine@2
-  inputs:
-    script: |
-      echo apt-get update here
-      sudo apt-get update
-      echo apt sources upgraded
-
 - script: |
     python3 -m pip install --upgrade pip
     pip install -r requirements.txt
   displayName: 'Install dependencies'
 
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'saikumartest'
+    organization: 'saikumartest'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'pythontesting'
+    cliProjectName: 'saikumartest'
+    cliSources: '.'
+
 - script: |
     pip install pytest pytest-azurepipelines
     pytest
   displayName: 'pytest'
+ 
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
 
 - script: |
     python3 startup.py sdist
   displayName: 'Artifact creation'
-  
+
 - task: CopyFiles@2
   inputs:
     targetFolder: $(Build.ArtifactStagingDirectory)
@@ -42,5 +51,7 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'dist'
     publishLocation: 'Container'
+
+
 
 
